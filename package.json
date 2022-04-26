@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "graphql": "^16.4.0",
     "html-react-parser": "^1.4.12",
     "moment": "^2.29.3",
     "next": "^12.1.5",
