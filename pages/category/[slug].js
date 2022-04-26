@@ -8,7 +8,7 @@ const CategoryPost = ({ posts }) => {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <Loader />;
+    return <Loader />;  
   }
 
   return (
