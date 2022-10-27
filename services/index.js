@@ -39,6 +39,42 @@ export const getPosts = async () => {
   return result.postsConnection.edges;
 };
 
+export const getLastPost = async () => {
+  const query = gql`
+    query GetLastPost() {
+      posts(
+        orderBy: createdAt_ASC
+        last: 1
+      ) {
+        title
+        featuredImage {
+          url
+        }
+        author {
+          name
+          photo {
+            url
+          }
+        }
+        excerpt
+        createdAt
+        slug
+        categories {
+          name
+          slug
+        }
+        content {
+          raw
+        }
+      }
+    }
+   `
+
+  const result = await request(graphqlAPI, query);
+
+  return result.posts;
+}
+
 export const getPostDetails = async (slug) => {
   const query = gql`
     query GetPostDetails($slug : String!) {
@@ -73,7 +109,7 @@ export const getPostDetails = async (slug) => {
   return result.post;
 };
 
-export const  getRecentPosts = async() => {
+export const getRecentPosts = async () => {
   const query = gql`
     query GetPostDetails() {
       posts(
@@ -86,17 +122,25 @@ export const  getRecentPosts = async() => {
         }
         createdAt
         slug
+        author {
+              bio
+              name
+              id
+              photo {
+                url
+              }
+            }
       }
     }
   `
 
-const result = await request(graphqlAPI, query);
+  const result = await request(graphqlAPI, query);
 
-return result.posts;
- 
+  return result.posts;
+
 }
 
-export const getSimilarPosts = async(categories, slug) => {
+export const getSimilarPosts = async (categories, slug) => {
   const query = gql`
     query GetPostsDetails($slug: String!, $cateogries: [String!]) {
       posts(
@@ -113,9 +157,9 @@ export const getSimilarPosts = async(categories, slug) => {
     }
   `
 
-const result = await request(graphqlAPI, query, {categories, slug});
+  const result = await request(graphqlAPI, query, { categories, slug });
 
-return result.posts;
+  return result.posts;
 }
 
 export const getCategories = async () => {
@@ -171,10 +215,10 @@ export const getCategoryPost = async (slug) => {
 };
 
 
-export const submitComment = async(obj) => {
+export const submitComment = async (obj) => {
   const result = await fetch('/api/comments', {
     method: 'POST',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(obj)
